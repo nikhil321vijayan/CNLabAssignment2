@@ -1,0 +1,6 @@
+viewAllActiveUsers()
+login(email,) - done
+logout()
+createUser(); 
+createAdmin()
+isAdmin()
