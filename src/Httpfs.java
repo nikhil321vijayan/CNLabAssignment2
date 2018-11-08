@@ -3,13 +3,13 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-public class MainClient {
+public class Httpfs {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("arg " + i + ": " + args[i]);
 		}
-		HttpClientLibrary library = new HttpClientLibrary();
+		FSClientLibrary library = new FSClientLibrary();
 		
 			if(args[0].toLowerCase().contentEquals("get"))
 			{

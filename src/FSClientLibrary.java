@@ -11,13 +11,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class HttpClientLibrary {
+public class FSClientLibrary {
 	public void getAllFiles() throws UnknownHostException, IOException
 	{
 		String requestMessage = "";
 		requestMessage += "GET / HTTP/1.1\r\n";
 		requestMessage += "Host: localhost:8080";
-		new Thread(new HttpClient(requestMessage)).start();
+		new Thread(new FSClient(requestMessage)).start();
 
 	}
 
@@ -25,8 +25,7 @@ public class HttpClientLibrary {
 		String requestMessage = "";
 		requestMessage += "GET /" + filename + " HTTP/1.1\r\n";
 		requestMessage += "Host: localhost:8080";
-		System.out.println("request message: " + requestMessage);
-		new Thread(new HttpClient(requestMessage)).start();
+		new Thread(new FSClient(requestMessage)).start();
 	}
 
 	public void postFile(String toFilename, String fromFilename) {
@@ -47,8 +46,8 @@ public class HttpClientLibrary {
 		requestMessage += "Host: localhost:8080\r\n";
 		requestMessage += "Content-Type: " + contentType + "\r\n";
 		requestMessage += "Content-Length: " + body.length() + "\r\n\r\n" + body + "\r\n";
-		System.out.println("POST Request Message:::" + requestMessage);
-		new Thread(new HttpClient(requestMessage)).start();
+		//System.out.println("POST Request Message:::" + requestMessage);
+		new Thread(new FSClient(requestMessage)).start();
 		
 	}
 

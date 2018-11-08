@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
-public class Server implements Runnable {
+public class FileServer implements Runnable {
 
 	@Override
 	public void run() {
@@ -19,8 +18,8 @@ public class Server implements Runnable {
 		String input = "";
 		String[] args;
 		File folder = new File("C:\\Users\\Nikhil Vijayan\\CNLabDemo\\CNLabAssignment2\\DefaultDirectory");
-		Date date = new Date(); 
-		
+		Date date = new Date();
+
 		try {
 			serverSocket = new ServerSocket(9002);
 			System.out.println("Listening to port 9002...\r\n\r\n");
@@ -31,7 +30,6 @@ public class Server implements Runnable {
 			while ((input = inputReader.readLine()) != null) {
 				recievedRequest += input + "\r\n";
 			}
-			//System.out.println("The recieved request is :: \r\n" + recievedRequest);
 			if (recievedRequest != null) {
 				if (recievedRequest.contains("GET")) {
 					String[] lines = recievedRequest.split("\r\n");
@@ -40,13 +38,11 @@ public class Server implements Runnable {
 						File[] listOfFiles = folder.listFiles();
 						String fileNames = "";
 						for (int i = 0; i < listOfFiles.length; i++) {
-								fileNames += listOfFiles[i].getName();
+							fileNames += listOfFiles[i].getName();
 						}
-						System.out.println("HTTP/1.1 200 OK\r\n" + 
-								"Date: " + date.toString() +"\r\n" + 
-								"Server: localhost:9002\r\n" + 
-								"Content-Length: " + fileNames.length() + "\r\n" + 
-								"Connection: Closed" + "\r\n\r\n");
+						System.out.println("HTTP/1.1 200 OK\r\n" + "Date: " + date.toString() + "\r\n"
+								+ "Server: localhost:9002\r\n" + "Content-Length: " + fileNames.length() + "\r\n"
+								+ "Connection: Closed" + "\r\n\r\n");
 						for (int i = 0; i < listOfFiles.length; i++) {
 							if (listOfFiles[i].isFile()) {
 								System.out.println("File " + listOfFiles[i].getName());
@@ -54,13 +50,13 @@ public class Server implements Runnable {
 								System.out.println("Directory " + listOfFiles[i].getName());
 							}
 						}
-					} 
-					
+					}
+
 					else if (args[1].matches("/.+")) {
 						String fileToFind = args[1].substring(1);
 						String line = "", body = "";
 						if (checkFileExists(fileToFind, folder)) {
-							
+
 							try (BufferedReader br = new BufferedReader(new FileReader(folder + "\\" + fileToFind))) {
 								while ((line = br.readLine()) != null) {
 									body += line + "\r\n";
@@ -70,18 +66,14 @@ public class Server implements Runnable {
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							
-							System.out.println("HTTP/1.1 200 OK\r\n" + 
-									"Date: " + date.toString() +"\r\n" + 
-									"Server: localhost:9002\r\n" + 
-									"Content-Length: " + body.length() + "\r\n" + 
-									"Connection: Closed" + "\r\n\r\n");
+
+							System.out.println("HTTP/1.1 200 OK\r\n" + "Date: " + date.toString() + "\r\n"
+									+ "Server: localhost:9002\r\n" + "Content-Length: " + body.length() + "\r\n"
+									+ "Connection: Closed" + "\r\n\r\n");
 							System.out.println(body);
 						} else {
-							System.out.println("HTTP/1.1 404 File not found\r\n" + 
-									"Date: " + date.toString() +"\r\n" + 
-									"Server: localhost:9002\r\n" + 
-									"Connection: Closed" + "\r\n\r\n");
+							System.out.println("HTTP/1.1 404 File not found\r\n" + "Date: " + date.toString() + "\r\n"
+									+ "Server: localhost:9002\r\n" + "Connection: Closed" + "\r\n\r\n");
 						}
 					}
 				}
@@ -102,12 +94,9 @@ public class Server implements Runnable {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-								System.out.println("HTTP/1.1 200 OK\r\n" + 
-										"Connection: keep-alive\r\n" + 
-										"Date: " + date.toString() +"\r\n" + 
-										"Server: localhost:9002\r\n" + 
-										"Content-Length: " + body.length() + "\r\n\r\n" + 
-										body);
+								System.out.println("HTTP/1.1 200 OK\r\n" + "Connection: keep-alive\r\n" + "Date: "
+										+ date.toString() + "\r\n" + "Server: localhost:9002\r\n" + "Content-Length: "
+										+ body.length() + "\r\n\r\n" + body);
 							} else {
 								String body = extractBody(recievedRequest);
 								try {
@@ -119,17 +108,14 @@ public class Server implements Runnable {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-								System.out.println("HTTP/1.1 200 OK\r\n" + 
-										"Connection: keep-alive\r\n" + 
-										"Date: " + date.toString() +"\r\n" + 
-										"Server: localhost:9002\r\n" + 
-										"Content-Length: " + body.length() + "\r\n" + 
-										body +  "\r\n\r\n");
+								System.out.println("HTTP/1.1 200 OK\r\n" + "Connection: keep-alive\r\n" + "Date: "
+										+ date.toString() + "\r\n" + "Server: localhost:9002\r\n" + "Content-Length: "
+										+ body.length() + "\r\n" + body + "\r\n\r\n");
 							}
 						}
 					}
 				} else {
-					System.out.println("Printing first line :::  " + input);
+					System.out.println("HTTP/1.1 400 Bad Request");
 				}
 
 			}
@@ -142,6 +128,7 @@ public class Server implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 
 	private boolean checkFileExists(String fileToFind, File folder) {
@@ -155,7 +142,6 @@ public class Server implements Runnable {
 					fileExists = true;
 					break;
 				}
-				// else System.out.println("File not found");
 			}
 		if (fileExists) {
 			return true;
@@ -167,7 +153,6 @@ public class Server implements Runnable {
 	private String extractBody(String requestString) {
 		String[] requestLines = requestString.split("\r\n\r\n");
 		return requestLines[requestLines.length - 1];
-
 	}
 
 }

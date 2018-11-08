@@ -5,11 +5,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class HttpClient implements Runnable {
+public class FSClient implements Runnable {
 
 	String requestMessage = "";
 
-	public HttpClient(String requestMessage) {
+	public FSClient(String requestMessage) {
 		this.requestMessage = requestMessage;
 	}
 
@@ -22,7 +22,6 @@ public class HttpClient implements Runnable {
 			socket = new Socket("localhost",9002);
 			PrintWriter outWriter = new PrintWriter(socket.getOutputStream(),true);
 			outWriter.print(requestMessage);
-			//System.out.println("writing request: " + requestMessage);
 			outWriter.flush();
 		}
 		catch(InterruptedException e) {
